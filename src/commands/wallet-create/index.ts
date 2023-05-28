@@ -3,7 +3,7 @@
 */
 
 // Global npm libraries
-import { Args, Command, Flags } from '@oclif/core'
+import { Command, Flags } from '@oclif/core'
 import Web3 from 'web3'
 
 // Local libraries
@@ -26,8 +26,8 @@ class WalletCreate extends Command {
   static description = 'Create a new wallet.'
 
   static examples = [
-    `$ oex hello friend --from oclif
-hello friend from oclif! (./src/commands/hello/index.ts)
+    `$ psf-avaxc-wallet create-wallet -n mywallet
+
 `
   ]
 
@@ -35,34 +35,36 @@ hello friend from oclif! (./src/commands/hello/index.ts)
     name: Flags.string({ char: 'n', description: 'Filename for wallet file', required: true })
   }
 
-  // static args = {
-  //   person: Args.string({ description: 'Person to say hello to', required: true })
-  // }
-
   async run (): Promise<void> {
     try {
-      const { args, flags } = await this.parse(WalletCreate)
+      const { flags } = await this.parse(WalletCreate)
 
-      // Instantiate web3 with a provider.
-      // const web3Provider = new Web3.providers.HttpProvider(provider);
-      // const web3 = new Web3(web3Provider);
-      const web3 = new Web3(provider)
-
-      // Create a new account.
-      const account = web3.eth.accounts.create()
-      console.log('account: ', account)
-
-      // Save the wallet data into a .json text file.
-      const walletObj = {
-        address: account.address,
-        privateKey: account.privateKey
-      }
-
-      // Write the object to a file
-      await this.walletUtil.saveWallet(flags.name, walletObj)
+      await this.createWallet(flags)
     } catch (err) {
       console.error(err)
     }
+  }
+
+  // Generate a new key pair, save it to a file, and return an object containing
+  // the address and private key.
+  async createWallet (flags: any): Promise<object> {
+    // Instantiate web3 with a provider.
+    const web3 = new Web3(provider)
+
+    // Create a new account.
+    const account = web3.eth.accounts.create()
+    // console.log('account: ', account)
+
+    // Save the wallet data into a .json text file.
+    const walletObj = {
+      address: account.address,
+      privateKey: account.privateKey
+    }
+
+    // Write the object to a file
+    await this.walletUtil.saveWallet(flags.name, walletObj)
+
+    return walletObj
   }
 }
 
