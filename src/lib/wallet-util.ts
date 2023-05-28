@@ -27,6 +27,15 @@ class WalletUtil {
 
     return true
   }
+
+  async openWallet (filename: string): Promise<object> {
+    // Generate a filepath for the new file, in the .wallets directory.
+    const filepath = `${__dirname.toString()}/../../.wallets/${filename}`
+
+    const walletData = await this.fs.readFile(filepath, 'utf8')
+
+    return JSON.parse(walletData)
+  }
 }
 
 export default WalletUtil
