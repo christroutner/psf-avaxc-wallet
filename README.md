@@ -1,7 +1,7 @@
-oclif-hello-world
+psf-avaxc-wallet
 =================
 
-oclif example Hello World CLI
+A command line wallet for working with the AVAX-C chain. This uses the web3.js library.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/oclif/hello-world/tree/main)
