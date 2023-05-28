@@ -35,13 +35,17 @@ class WalletCreate extends Command {
     name: Flags.string({ char: 'n', description: 'Filename for wallet file', required: true })
   }
 
-  async run (): Promise<void> {
+  async run (): Promise<boolean> {
     try {
       const { flags } = await this.parse(WalletCreate)
 
       await this.createWallet(flags)
+
+      return true
     } catch (err) {
       console.error(err)
+
+      return false
     }
   }
 
