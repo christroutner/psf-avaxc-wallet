@@ -1,5 +1,5 @@
 /*
-  Unit tests for the wallet-balance command.
+  Unit tests for the wallet-usdc-balance command.
 */
 
 // eslint-disable-next-line
@@ -8,24 +8,37 @@
 // Global npm libraries
 import { assert } from 'chai'
 import sinon from 'sinon'
+import Web3 from 'web3'
 
 // Local libraries
-import WalletBalance from '../../../src/commands/wallet-balance'
+import WalletUsdcBalance from '../../../src/commands/wallet-usdc-balance'
+import configSettings from '../../../src/config'
 
-describe('#wallet-balance', () => {
+describe('#wallet-usdc-balance', () => {
   let uut: any
   let sandbox: any
 
   beforeEach(() => {
-    uut = new WalletBalance(undefined, undefined)
+    uut = new WalletUsdcBalance(undefined, undefined)
 
     sandbox = sinon.createSandbox()
   })
 
   afterEach(() => sandbox.restore())
 
+  describe('#generateContractInterface', () => {
+    it('should generate Contract instance.', async () => {
+      const web3 = new Web3(configSettings.provider)
+
+      const result = await uut.generateContractInterface(web3)
+      // console.log('result: ', result)
+
+      assert.property(result.methods, 'balanceOf')
+    })
+  })
+
   describe('#getBalance()', () => {
-    it('should create a new wallet', async () => {
+    it('should get ERC20 balance', async () => {
       const flags = {
         name: 'testwallet'
       }
