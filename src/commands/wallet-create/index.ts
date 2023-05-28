@@ -3,10 +3,16 @@
 */
 
 import { Args, Command, Flags } from '@oclif/core'
-import Conf from 'conf'
 
-export default class WalletCreate extends Command {
-  constructor (argv, config) {
+// @ts-ignore
+import * as Conf from 'conf'
+
+interface WalletCreate {
+  conf: any
+}
+
+class WalletCreate extends Command {
+  constructor (argv: any, config: any) {
     super(argv, config)
 
     this.conf = new Conf()
@@ -34,3 +40,5 @@ hello friend from oclif! (./src/commands/hello/index.ts)
     this.log(`hello ${args.person} from ${flags.from}! (./src/commands/hello/index.ts)`)
   }
 }
+
+export default WalletCreate
