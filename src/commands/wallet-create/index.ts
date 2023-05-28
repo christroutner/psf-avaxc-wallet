@@ -4,18 +4,15 @@
 
 import { Args, Command, Flags } from '@oclif/core'
 
-// @ts-ignore
-import * as Conf from 'conf'
-
 interface WalletCreate {
-  conf: any
+  placeholder: any
 }
 
 class WalletCreate extends Command {
   constructor (argv: any, config: any) {
     super(argv, config)
 
-    this.conf = new Conf()
+    this.placeholder = 42
   }
 
   static description = 'Create a new wallet.'
