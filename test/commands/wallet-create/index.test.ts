@@ -2,6 +2,8 @@
   Unit tests for the wallet-create command.
 */
 
+/// <reference types="mocha" />
+
 // Global npm libraries
 import { assert } from 'chai'
 
@@ -23,7 +25,8 @@ describe('#wallet-create', () => {
 
       const result = await uut.createWallet(flags)
 
-      assert.equal(result, true)
+      assert.property(result, 'address')
+      assert.property(result, 'privateKey')
     })
   })
 })
