@@ -3,8 +3,15 @@
 */
 
 import { Args, Command, Flags } from '@oclif/core'
+import Conf from 'conf'
 
-export default class Hello extends Command {
+export default class WalletCreate extends Command {
+  constructor (argv, config) {
+    super(argv, config)
+
+    this.conf = new Conf()
+  }
+
   static description = 'Create a new wallet.'
 
   static examples = [
@@ -22,7 +29,7 @@ hello friend from oclif! (./src/commands/hello/index.ts)
   }
 
   async run (): Promise<void> {
-    const { args, flags } = await this.parse(Hello)
+    const { args, flags } = await this.parse(WalletCreate)
 
     this.log(`hello ${args.person} from ${flags.from}! (./src/commands/hello/index.ts)`)
   }

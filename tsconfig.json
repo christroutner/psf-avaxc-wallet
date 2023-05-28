@@ -9,7 +9,6 @@
     "target": "es2019"
   },
   "include": [
-    "src/**/*",
-    "test/**/*"
+    "src/**/*"
   ]
 }
