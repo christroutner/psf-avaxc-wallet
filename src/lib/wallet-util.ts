@@ -3,10 +3,10 @@
 */
 
 // Global npm libraries.
-import fs from 'fs'
+import { promises as fs } from 'fs'
 
 interface WalletUtil {
-  fs: any
+  fs: typeof fs
 }
 
 class WalletUtil {
@@ -20,7 +20,12 @@ class WalletUtil {
 
   // Save the wallet data into a .json text file.
   async saveWallet (filename: string, walletData: object): Promise<boolean> {
-    await this.fs.writeFile(filename, JSON.stringify(walletData, null, 2))
+    
+    // Generate a filepath for the new file, in the .wallets directory.
+    const dirname = `${__dirname}`
+    const filepath = `${__dirname}/../../.wallets/${filename}`
+
+    await this.fs.writeFile(filepath, JSON.stringify(walletData, null, 2))
 
     return true
   }

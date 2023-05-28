@@ -6,17 +6,21 @@
 import { Args, Command, Flags } from '@oclif/core'
 import Web3 from 'web3'
 
+// Local libraries
+import WalletUtil from '../../lib/wallet-util'
+
 const provider = 'https://rpc.ankr.com/eth/4d57e604f2505f964c927dcdd7a94b51fd5496cbd778029c9b5400531bedb3dc'
 
 interface WalletCreate {
-  placeholder: any
+  walletUtil: WalletUtil
 }
 
 class WalletCreate extends Command {
   constructor (argv: any, config: any) {
     super(argv, config)
 
-    this.placeholder = 42
+    // Encapsulate dependencies
+    this.walletUtil = new WalletUtil()
   }
 
   static description = 'Create a new wallet.'
@@ -28,12 +32,12 @@ hello friend from oclif! (./src/commands/hello/index.ts)
   ]
 
   static flags = {
-    from: Flags.string({ char: 'f', description: 'Who is saying hello', required: true })
+    name: Flags.string({ char: 'n', description: 'Filename for wallet file', required: true })
   }
 
-  static args = {
-    person: Args.string({ description: 'Person to say hello to', required: true })
-  }
+  // static args = {
+  //   person: Args.string({ description: 'Person to say hello to', required: true })
+  // }
 
   async run (): Promise<void> {
     try {
@@ -48,7 +52,14 @@ hello friend from oclif! (./src/commands/hello/index.ts)
       const account = web3.eth.accounts.create()
       console.log('account: ', account)
 
-      this.log(`hello ${args.person} from ${flags.from}! (./src/commands/hello/index.ts)`)
+      // Save the wallet data into a .json text file.
+      const walletObj = {
+        address: account.address,
+        privateKey: account.privateKey
+      }
+
+      // Write the object to a file
+      await this.walletUtil.saveWallet(flags.name, walletObj)
     } catch (err) {
       console.error(err)
     }
