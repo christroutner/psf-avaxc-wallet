@@ -1,25 +1,75 @@
-import { Args, Command, Flags } from '@oclif/core'
+/*
+  Create a new keypair that can be imported into metamask.
+*/
 
-export default class Hello extends Command {
-  static description = 'Say hello'
+// Global npm libraries
+import { Command, Flags } from '@oclif/core'
+import Web3 from 'web3'
+
+// Local libraries
+import WalletUtil from '../../lib/wallet-util'
+
+const provider = 'https://rpc.ankr.com/eth/4d57e604f2505f964c927dcdd7a94b51fd5496cbd778029c9b5400531bedb3dc'
+
+interface WalletCreate {
+  walletUtil: WalletUtil
+}
+
+class WalletCreate extends Command {
+  constructor (argv: any, config: any) {
+    super(argv, config)
+
+    // Encapsulate dependencies
+    this.walletUtil = new WalletUtil()
+  }
+
+  static description = 'Create a new wallet.'
 
   static examples = [
-    `$ oex hello friend --from oclif
-hello friend from oclif! (./src/commands/hello/index.ts)
+    `$ psf-avaxc-wallet create-wallet -n mywallet
+
 `
   ]
 
   static flags = {
-    from: Flags.string({ char: 'f', description: 'Who is saying hello', required: true })
+    name: Flags.string({ char: 'n', description: 'Filename for wallet file', required: true })
   }
 
-  static args = {
-    person: Args.string({ description: 'Person to say hello to', required: true })
+  async run (): Promise<boolean> {
+    try {
+      const { flags } = await this.parse(WalletCreate)
+
+      await this.createWallet(flags)
+
+      return true
+    } catch (err) {
+      console.error(err)
+
+      return false
+    }
   }
 
-  async run (): Promise<void> {
-    const { args, flags } = await this.parse(Hello)
+  // Generate a new key pair, save it to a file, and return an object containing
+  // the address and private key.
+  async createWallet (flags: any): Promise<object> {
+    // Instantiate web3 with a provider.
+    const web3 = new Web3(provider)
 
-    this.log(`hello ${args.person} from ${flags.from}! (./src/commands/hello/index.ts)`)
+    // Create a new account.
+    const account = web3.eth.accounts.create()
+    // console.log('account: ', account)
+
+    // Save the wallet data into a .json text file.
+    const walletObj = {
+      address: account.address,
+      privateKey: account.privateKey
+    }
+
+    // Write the object to a file
+    await this.walletUtil.saveWallet(flags.name, walletObj)
+
+    return walletObj
   }
 }
+
+export default WalletCreate
