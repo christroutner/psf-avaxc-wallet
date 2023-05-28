@@ -1,7 +1,11 @@
+/*
+  Create a new wallet.
+*/
+
 import { Args, Command, Flags } from '@oclif/core'
 
 export default class Hello extends Command {
-  static description = 'Say hello'
+  static description = 'Create a new wallet.'
 
   static examples = [
     `$ oex hello friend --from oclif
