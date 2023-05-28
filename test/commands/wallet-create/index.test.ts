@@ -2,6 +2,7 @@
   Unit tests for the wallet-create command.
 */
 
+// eslint-disable-next-line
 /// <reference types="mocha" />
 
 // Global npm libraries
