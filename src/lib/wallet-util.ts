@@ -1,5 +1,5 @@
 /*
-  Utility library for wallet functions.
+  Utility library of commonly-used wallet functions.
 */
 
 // Global npm libraries.

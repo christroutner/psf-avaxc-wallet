@@ -8,11 +8,11 @@ import Web3 from 'web3'
 
 // Local libraries
 import WalletUtil from '../../lib/wallet-util'
-
-const provider = 'https://rpc.ankr.com/eth/4d57e604f2505f964c927dcdd7a94b51fd5496cbd778029c9b5400531bedb3dc'
+import configSettings from '../../config'
 
 interface WalletCreate {
   walletUtil: WalletUtil
+  configSettings: any
 }
 
 class WalletCreate extends Command {
@@ -21,6 +21,10 @@ class WalletCreate extends Command {
 
     // Encapsulate dependencies
     this.walletUtil = new WalletUtil()
+    this.configSettings = configSettings
+
+    // Bind functions that need access to 'this'
+    this.createWallet = this.createWallet.bind(this)
   }
 
   static description = 'Create a new wallet.'
@@ -41,6 +45,8 @@ class WalletCreate extends Command {
 
       await this.createWallet(flags)
 
+      console.log('Wallet created successfully.')
+
       return true
     } catch (err) {
       console.error(err)
@@ -53,7 +59,7 @@ class WalletCreate extends Command {
   // the address and private key.
   async createWallet (flags: any): Promise<object> {
     // Instantiate web3 with a provider.
-    const web3 = new Web3(provider)
+    const web3 = new Web3(this.configSettings.provider)
 
     // Create a new account.
     const account = web3.eth.accounts.create()
